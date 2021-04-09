@@ -72,6 +72,16 @@
         </template>
       </el-table-column>
     </el-table>
+    <!-- 分页 -->
+    <el-pagination
+      @size-change="handleSizeChange"
+      @current-change="handleCurrentChange"
+      :current-page="pagenum"
+      :page-sizes="[2, 4, 6, 8]"
+      :page-size="pagesize"
+      layout="total, sizes, prev, pager, next, jumper"
+      :total="total">
+    </el-pagination>
   </el-card>
 </template>
 
@@ -81,7 +91,11 @@ export default {
     return {
       searchValue: '',
       list: [],
-      loading: false
+      loading: false,
+      // 分页数据
+      pagenum: 1,
+      pagesize: 2,
+      total: 0
     }
   },
   created () {
@@ -95,12 +109,11 @@ export default {
         this.$http.defaults.headers.Authorization = window.localStorage.getItem('token')
         const res = await this.$http.get('http://localhost:8888/api/private/v1/users', {
           params: {
-            pagenum: 1,
-            pagesize: 10,
+            pagenum: this.pagenum,
+            pagesize: this.pagesize,
             query: this.searchValue
           }
         })
-        console.log(res)
         // res 是axios对象封装的响应对象
         // data 是接口返回的数据，status 是响应码
         const { data, status } = res
@@ -109,6 +122,8 @@ export default {
           if (code === 200) {
             // 获取数据成功
             this.list = data.data.users
+            // 记录共多少条数据
+            this.total = data.data.total
           } else {
             // 失败
             this.$message({
@@ -128,6 +143,18 @@ export default {
       } finally {
         this.loading = false
       }
+    },
+    // 分页方法
+    handleSizeChange (val) {
+      console.log(`每页 ${val} 条`)
+      this.pagesize = val
+      this.pagenum = 1
+      this.loadData()
+    },
+    handleCurrentChange (val) {
+      console.log(`当前页: ${val}`)
+      this.pagenum = val
+      this.loadData()
     }
   }
 }
