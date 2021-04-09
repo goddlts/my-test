@@ -107,7 +107,7 @@ export default {
       try {
         // 请求之前设置令牌
         this.$http.defaults.headers.Authorization = window.localStorage.getItem('token')
-        const res = await this.$http.get('http://localhost:8888/api/private/v1/users', {
+        const res = await this.$http.get('/users', {
           params: {
             pagenum: this.pagenum,
             pagesize: this.pagesize,
@@ -116,28 +116,11 @@ export default {
         })
         // res 是axios对象封装的响应对象
         // data 是接口返回的数据，status 是响应码
-        const { data, status } = res
-        if (status === 200) {
-          const { meta: { msg, status: code } } = data
-          if (code === 200) {
-            // 获取数据成功
-            this.list = data.data.users
-            // 记录共多少条数据
-            this.total = data.data.total
-          } else {
-            // 失败
-            this.$message({
-              message: msg,
-              type: 'error'
-            })
-          }
-        } else {
-          // 请求失败
-          this.$message({
-            message: '请求失败',
-            type: 'error'
-          })
-        }
+        const { data } = res
+        // 获取数据成功
+        this.list = data.users
+        // 记录共多少条数据
+        this.total = data.total
       } catch (err) {
         console.log(err)
       } finally {

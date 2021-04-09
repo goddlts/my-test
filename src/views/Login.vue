@@ -33,45 +33,19 @@ export default {
   methods: {
     handleLogin () {
       this.$http
-        .post('http://localhost:8888/api/private/v1/login', this.formData)
+        .post('/login', this.formData)
         .then(res => {
-          const { data, status } = res
-          // 判断的是 http 的状态码
-          if (status === 200) {
-            // data.data.token
-            // console.log(data)
-
-            // 判断服务器返回的数据中，是否登录成功
-            // { data: { token }, meta: { msg, status } }
-
-            // 解构服务器返回的数据
-            const { meta: { msg, status: code } } = data
-            if (code === 200) {
-              // 只有成功的时候，才可以获取数据中的 token
-              const token = data.data.token
-              // 成功
-              this.$message({
-                message: '登录成功',
-                type: 'success'
-              })
-              // 把token存储到本地存储
-              window.localStorage.setItem('token', token)
-              // 跳转到首页
-              this.$router.push('/')
-            } else {
-              // 登录失败
-              this.$message({
-                message: msg,
-                type: 'error'
-              })
-            }
-          } else {
-            // 请求失败
-            this.$message({
-              message: '请求失败',
-              type: 'error'
-            })
-          }
+          const { data } = res
+          const token = data.token
+          // 成功
+          this.$message({
+            message: '登录成功',
+            type: 'success'
+          })
+          // 把token存储到本地存储
+          window.localStorage.setItem('token', token)
+          // 跳转到首页
+          this.$router.push('/')
         })
         .catch(err => {
           console.log(err)

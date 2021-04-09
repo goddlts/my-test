@@ -5,16 +5,16 @@ import store from './store'
 import ElementUI from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
 import './assets/css/style.less'
-import axios from 'axios'
 import dayjs from 'dayjs'
+import http from './plugins/http'
+
+Vue.use(http)
 
 Vue.filter('fmtDate', (value, fmtString) => {
   return dayjs(value).format(fmtString)
 })
 
 Vue.use(ElementUI)
-
-Vue.prototype.$http = axios
 
 Vue.config.productionTip = false
 
