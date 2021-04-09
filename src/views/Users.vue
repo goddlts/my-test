@@ -16,6 +16,7 @@
     </div>
     <!-- 表格 -->
     <el-table
+      v-loading="loading"
       :data="list"
       stripe
       border
@@ -79,7 +80,8 @@ export default {
   data () {
     return {
       searchValue: '',
-      list: []
+      list: [],
+      loading: false
     }
   },
   created () {
@@ -87,6 +89,7 @@ export default {
   },
   methods: {
     async loadData () {
+      this.loading = true
       try {
         // 请求之前设置令牌
         this.$http.defaults.headers.Authorization = window.localStorage.getItem('token')
@@ -122,6 +125,8 @@ export default {
         }
       } catch (err) {
         console.log(err)
+      } finally {
+        this.loading = false
       }
     }
   }
