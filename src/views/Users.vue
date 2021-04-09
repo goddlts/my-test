@@ -40,20 +40,35 @@
         label="电话">
       </el-table-column>
       <el-table-column
-        prop=""
+        prop="role_name"
         label="角色">
       </el-table-column>
       <el-table-column
-        prop="create_time"
         width="120"
         label="创建时间">
+        <template slot-scope="scope">
+          {{ scope.row.create_time | fmtDate('YYYY-MM-DD') }}
+        </template>
       </el-table-column>
       <el-table-column
-        prop=""
+        prop="mg_state"
         label="状态">
+        <template slot-scope="scope">
+          <el-switch
+            v-model="scope.row.mg_state"
+            active-color="#13ce66"
+            inactive-color="#ff4949">
+          </el-switch>
+        </template>
       </el-table-column>
       <el-table-column
+        width="200"
         label="操作">
+        <template>
+          <el-button type="primary" icon="el-icon-edit" plain size="mini"></el-button>
+          <el-button type="danger" icon="el-icon-delete" plain size="mini"></el-button>
+          <el-button type="success" icon="el-icon-check" plain size="mini"></el-button>
+        </template>
       </el-table-column>
     </el-table>
   </el-card>

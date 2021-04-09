@@ -6,6 +6,11 @@ import ElementUI from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
 import './assets/css/style.less'
 import axios from 'axios'
+import dayjs from 'dayjs'
+
+Vue.filter('fmtDate', (value, fmtString) => {
+  return dayjs(value).format(fmtString)
+})
 
 Vue.use(ElementUI)
 
