@@ -67,7 +67,7 @@
         width="200"
         label="操作">
         <template slot-scope="scope">
-          <el-button type="primary" icon="el-icon-edit" plain size="mini"></el-button>
+          <el-button type="primary" icon="el-icon-edit" @click="handleEdit(scope.row)" plain size="mini"></el-button>
           <el-button type="danger" icon="el-icon-delete" @click="handleDelete(scope.row.id)" plain size="mini"></el-button>
           <el-button type="success" icon="el-icon-check" plain size="mini"></el-button>
         </template>
@@ -88,9 +88,9 @@
     <el-dialog @closed="handleCloseDialog" :title="title" :visible.sync="dialogFormVisible">
       <el-form ref="myform" :model="form" label-width="80px">
         <el-form-item label="用户名" prop="username">
-          <el-input v-model="form.username" autocomplete="off" clearable></el-input>
+          <el-input v-model="form.username" :disabled="isEdit" autocomplete="off" clearable></el-input>
         </el-form-item>
-        <el-form-item label="密码" prop="password">
+        <el-form-item label="密码" prop="password" v-if="!isEdit">
           <el-input v-model="form.password" show-password clearable autocomplete="off"></el-input>
         </el-form-item>
         <el-form-item label="邮箱" prop="email">
@@ -262,12 +262,22 @@ export default {
       // this.form.password = ''
 
       // 遍历 form 对象中的所有属性，并清空属性的值
-      // for (let key in this.form) {
-      //   this.form[key] = ''
-      // }
+      for (const key in this.form) {
+        this.form[key] = ''
+      }
 
       // 重置表单
-      this.$refs.myform.resetFields()
+      // this.$refs.myform.resetFields()
+    },
+    // 点击编辑按钮
+    handleEdit (user) {
+      this.dialogFormVisible = true
+      this.isEdit = true
+      this.title = '修改用户'
+
+      this.form.username = user.username
+      this.form.mobile = user.mobile
+      this.form.email = user.email
     }
   }
 }
