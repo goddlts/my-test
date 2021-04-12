@@ -102,7 +102,7 @@
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button @click="dialogFormVisible = false">取 消</el-button>
-        <el-button type="primary" @click="dialogFormVisible = false">确 定</el-button>
+        <el-button type="primary" @click="handleSure">确 定</el-button>
       </div>
     </el-dialog>
   </el-card>
@@ -240,7 +240,21 @@ export default {
     handleShowDialog () {
       this.dialogFormVisible = true
       this.title = '添加用户'
-      this.isEdit = true
+      this.isEdit = false
+    },
+    // 点击弹出框的确定按钮
+    async handleSure () {
+      // 添加
+      if (!this.isEdit) {
+        await this.$http.post('/users', this.form)
+      }
+
+      this.dialogFormVisible = false
+      this.loadData()
+      this.$message({
+        type: 'success',
+        message: '操作成功'
+      })
     }
   }
 }
