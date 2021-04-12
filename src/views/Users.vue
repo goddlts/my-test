@@ -85,18 +85,18 @@
     </el-pagination>
 
     <!-- 弹出对话框 添加/修改 -->
-    <el-dialog :title="title" :visible.sync="dialogFormVisible">
-      <el-form :model="form" label-width="80px">
-        <el-form-item label="用户名">
+    <el-dialog @closed="handleCloseDialog" :title="title" :visible.sync="dialogFormVisible">
+      <el-form ref="myform" :model="form" label-width="80px">
+        <el-form-item label="用户名" prop="username">
           <el-input v-model="form.username" autocomplete="off" clearable></el-input>
         </el-form-item>
-        <el-form-item label="密码">
+        <el-form-item label="密码" prop="password">
           <el-input v-model="form.password" show-password clearable autocomplete="off"></el-input>
         </el-form-item>
-        <el-form-item label="邮箱">
+        <el-form-item label="邮箱" prop="email">
           <el-input v-model="form.email" autocomplete="off"></el-input>
         </el-form-item>
-        <el-form-item label="手机">
+        <el-form-item label="手机" prop="mobile">
           <el-input v-model="form.mobile" autocomplete="off"></el-input>
         </el-form-item>
       </el-form>
@@ -255,6 +255,19 @@ export default {
         type: 'success',
         message: '操作成功'
       })
+    },
+    // 添加/编辑对话框关闭执行
+    handleCloseDialog () {
+      // this.form.username = ''
+      // this.form.password = ''
+
+      // 遍历 form 对象中的所有属性，并清空属性的值
+      // for (let key in this.form) {
+      //   this.form[key] = ''
+      // }
+
+      // 重置表单
+      this.$refs.myform.resetFields()
     }
   }
 }
