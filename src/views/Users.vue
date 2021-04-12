@@ -56,6 +56,7 @@
         label="状态">
         <template slot-scope="scope">
           <el-switch
+            @change="handleSwitchChange(scope.row)"
             v-model="scope.row.mg_state"
             active-color="#13ce66"
             inactive-color="#ff4949">
@@ -174,6 +175,14 @@ export default {
       // }).catch(() => {
       //   console.log('您取消了删除的操作')
       // })
+    },
+    // 开关改变，修改用户状态
+    async handleSwitchChange (user) {
+      await this.$http.put(`/users/${user.id}/state/${user.mg_state}`)
+      this.$message({
+        type: 'success',
+        message: '修改用户状态成功'
+      })
     }
   }
 }
