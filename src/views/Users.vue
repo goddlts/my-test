@@ -126,7 +126,7 @@
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button @click="setRoleDialogVisible = false">取 消</el-button>
-        <el-button type="primary" @click="setRoleDialogVisible = false">确 定</el-button>
+        <el-button type="primary" @click="handleSetRole">确 定</el-button>
       </div>
     </el-dialog>
   </el-card>
@@ -319,18 +319,33 @@ export default {
       this.form.email = user.email
     },
     // 点击分配角色的按钮，弹出对话框
-    handleShowSetRoleDialog (user) {
+    async handleShowSetRoleDialog (user) {
       this.setRoleDialogVisible = true
       this.currentUser = user
 
+      const data = await this.$http.get(`/users/${user.id}`)
       // 找到当前用户角色的id
-      this.currentRoleId = ''
+      this.currentRoleId = data.data.rid
     },
     // 加载所有的角色
     async loadRoles () {
       const data = await this.$http.get('/roles')
-      console.log(data)
+      // console.log(data)
       this.roles = data.data
+    },
+    // 分配角色
+    async handleSetRole () {
+      await this.$http.put(`/users/${this.currentUser.id}/role`, {
+        rid: this.currentRoleId
+      })
+
+      this.$message({
+        type: 'success',
+        message: '分配角色成功'
+      })
+      this.loadData()
+
+      this.setRoleDialogVisible = false
     }
   }
 }
