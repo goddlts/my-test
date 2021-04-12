@@ -65,9 +65,9 @@
       <el-table-column
         width="200"
         label="操作">
-        <template>
+        <template slot-scope="scope">
           <el-button type="primary" icon="el-icon-edit" plain size="mini"></el-button>
-          <el-button type="danger" icon="el-icon-delete" @click="handleDelete" plain size="mini"></el-button>
+          <el-button type="danger" icon="el-icon-delete" @click="handleDelete(scope.row.id)" plain size="mini"></el-button>
           <el-button type="success" icon="el-icon-check" plain size="mini"></el-button>
         </template>
       </el-table-column>
@@ -140,22 +140,40 @@ export default {
       this.loadData()
     },
     // 点击删除按钮
-    handleDelete () {
-      // 弹出删除的对话框
-      this.$confirm('此操作将永久删除该用户, 是否继续?', '提示', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
-        type: 'warning'
-      }).then(() => {
-        // 点击了确定按钮，删除
-
+    async handleDelete (id) {
+      try {
+        await this.$confirm('此操作将永久删除该用户, 是否继续?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        })
+        // 此处点击的是确定
+        await this.$http.delete(`/users/${id}`)
+        this.loadData()
         this.$message({
           type: 'success',
           message: '删除成功!'
         })
-      }).catch(() => {
-        console.log('您取消了删除的操作')
-      })
+      } catch {
+        console.log('点了取消')
+      }
+
+      // 弹出删除的对话框
+      // this.$confirm('此操作将永久删除该用户, 是否继续?', '提示', {
+      //   confirmButtonText: '确定',
+      //   cancelButtonText: '取消',
+      //   type: 'warning'
+      // }).then(async () => {
+      //   // 点击了确定按钮，删除
+      // await this.$http.delete(`/users/${id}`)
+      // this.loadData()
+      // this.$message({
+      //   type: 'success',
+      //   message: '删除成功!'
+      // })
+      // }).catch(() => {
+      //   console.log('您取消了删除的操作')
+      // })
     }
   }
 }
