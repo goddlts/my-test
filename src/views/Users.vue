@@ -113,6 +113,15 @@
           {{ currentUser && currentUser.username }}
         </el-form-item>
         <el-form-item label="请选择角色">
+          <el-select v-model="currentRoleId" placeholder="请选择角色">
+            <el-option disabled label="请选择角色" :value="-1" />
+            <el-option
+              v-for="item in roles"
+              :key="item.id"
+              :label="item.roleName"
+              :value="item.id">
+            </el-option>
+          </el-select>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -151,11 +160,14 @@ export default {
       currentId: -1,
       // 分配角色对话框需要的数据
       setRoleDialogVisible: false,
-      currentUser: null
+      currentUser: null,
+      currentRoleId: -1,
+      roles: []
     }
   },
   created () {
     this.loadData()
+    this.loadRoles()
   },
   // 侦听器，监视搜索内容的变化
   watch: {
@@ -310,6 +322,15 @@ export default {
     handleShowSetRoleDialog (user) {
       this.setRoleDialogVisible = true
       this.currentUser = user
+
+      // 找到当前用户角色的id
+      this.currentRoleId = ''
+    },
+    // 加载所有的角色
+    async loadRoles () {
+      const data = await this.$http.get('/roles')
+      console.log(data)
+      this.roles = data.data
     }
   }
 }
