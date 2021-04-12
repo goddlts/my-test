@@ -69,7 +69,7 @@
         <template slot-scope="scope">
           <el-button type="primary" icon="el-icon-edit" @click="handleEdit(scope.row)" plain size="mini"></el-button>
           <el-button type="danger" icon="el-icon-delete" @click="handleDelete(scope.row.id)" plain size="mini"></el-button>
-          <el-button type="success" icon="el-icon-check" plain size="mini"></el-button>
+          <el-button type="success" icon="el-icon-check" plain size="mini" @click="handleShowSetRoleDialog(scope.row)"></el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -105,6 +105,21 @@
         <el-button type="primary" @click="handleSure">确 定</el-button>
       </div>
     </el-dialog>
+
+    <!-- 弹出对话框 分配角色 -->
+    <el-dialog title="分配角色" :visible.sync="setRoleDialogVisible">
+      <el-form label-width="100px">
+        <el-form-item label="用户名">
+          {{ currentUser && currentUser.username }}
+        </el-form-item>
+        <el-form-item label="请选择角色">
+        </el-form-item>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="setRoleDialogVisible = false">取 消</el-button>
+        <el-button type="primary" @click="setRoleDialogVisible = false">确 定</el-button>
+      </div>
+    </el-dialog>
   </el-card>
 </template>
 
@@ -131,7 +146,12 @@ export default {
         password: '',
         email: '',
         mobile: ''
-      }
+      },
+      // 编辑时需要的用户id
+      currentId: -1,
+      // 分配角色对话框需要的数据
+      setRoleDialogVisible: false,
+      currentUser: null
     }
   },
   created () {
@@ -247,6 +267,12 @@ export default {
       // 添加
       if (!this.isEdit) {
         await this.$http.post('/users', this.form)
+      } else {
+        // 修改的时候
+        await this.$http.put(`/users/${this.currentId}`, {
+          email: this.form.email,
+          mobile: this.form.mobile
+        })
       }
 
       this.dialogFormVisible = false
@@ -275,9 +301,15 @@ export default {
       this.isEdit = true
       this.title = '修改用户'
 
+      this.currentId = user.id
       this.form.username = user.username
       this.form.mobile = user.mobile
       this.form.email = user.email
+    },
+    // 点击分配角色的按钮，弹出对话框
+    handleShowSetRoleDialog (user) {
+      this.setRoleDialogVisible = true
+      this.currentUser = user
     }
   }
 }
