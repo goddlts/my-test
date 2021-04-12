@@ -12,7 +12,7 @@
         <el-button slot="append" icon="el-icon-search" @click="handleSearch"></el-button>
       </el-input>
 
-      <el-button type="success" plain style="margin-left: 10px;">添加用户</el-button>
+      <el-button type="success" plain style="margin-left: 10px;" @click="handleShowDialog">添加用户</el-button>
     </div>
     <!-- 表格 -->
     <el-table
@@ -83,6 +83,28 @@
       layout="total, sizes, prev, pager, next, jumper"
       :total="total">
     </el-pagination>
+
+    <!-- 弹出对话框 添加/修改 -->
+    <el-dialog :title="title" :visible.sync="dialogFormVisible">
+      <el-form :model="form" label-width="80px">
+        <el-form-item label="用户名">
+          <el-input v-model="form.username" autocomplete="off" clearable></el-input>
+        </el-form-item>
+        <el-form-item label="密码">
+          <el-input v-model="form.password" show-password clearable autocomplete="off"></el-input>
+        </el-form-item>
+        <el-form-item label="邮箱">
+          <el-input v-model="form.email" autocomplete="off"></el-input>
+        </el-form-item>
+        <el-form-item label="手机">
+          <el-input v-model="form.mobile" autocomplete="off"></el-input>
+        </el-form-item>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="dialogFormVisible = false">取 消</el-button>
+        <el-button type="primary" @click="dialogFormVisible = false">确 定</el-button>
+      </div>
+    </el-dialog>
   </el-card>
 </template>
 
@@ -99,7 +121,17 @@ export default {
       // 分页数据
       pagenum: 1,
       pagesize: 2,
-      total: 0
+      total: 0,
+      // 添加/修改对话框需要的 数据
+      title: '',
+      dialogFormVisible: false,
+      isEdit: false,
+      form: {
+        username: '',
+        password: '',
+        email: '',
+        mobile: ''
+      }
     }
   },
   created () {
@@ -203,6 +235,12 @@ export default {
     handleSearch () {
       this.pagenum = 1
       this.loadData()
+    },
+    // 点击添加按钮
+    handleShowDialog () {
+      this.dialogFormVisible = true
+      this.title = '添加用户'
+      this.isEdit = true
     }
   }
 }
