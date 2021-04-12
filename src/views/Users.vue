@@ -8,8 +8,8 @@
     <!-- 搜索框 -->
     <div style="margin-top: 10px; margin-bottom: 10px;">
       <!-- 搜索框 -->
-      <el-input style="width: 300px;" placeholder="请输入内容" v-model="searchValue">
-        <el-button slot="append" icon="el-icon-search"></el-button>
+      <el-input clearable style="width: 300px;" placeholder="请输入内容" v-model="searchValue">
+        <el-button slot="append" icon="el-icon-search" @click="handleSearch"></el-button>
       </el-input>
 
       <el-button type="success" plain style="margin-left: 10px;">添加用户</el-button>
@@ -183,6 +183,11 @@ export default {
         type: 'success',
         message: '修改用户状态成功'
       })
+    },
+    // 搜索功能
+    handleSearch () {
+      this.pagenum = 1
+      this.loadData()
     }
   }
 }
