@@ -87,6 +87,9 @@
 </template>
 
 <script>
+// 导入 lodash 模块
+import _ from 'lodash'
+
 export default {
   data () {
     return {
@@ -101,6 +104,18 @@ export default {
   },
   created () {
     this.loadData()
+  },
+  // 侦听器，监视搜索内容的变化
+  watch: {
+    // 函数的防抖 https://www.lodashjs.com/docs/lodash.debounce
+    //    执行一个函数的时候会等一段时间，每次调用函数都会等一段时间，最后一调用完成并且时间到达才会真正执行该函数
+    //    百度的搜索文本框、拖动窗口大小的时候
+    // 函数的节流 https://www.lodashjs.com/docs/lodash.throttle
+    //    调用函数多次，都不执行，只有时间到达之后执行一次。
+    //    无限下拉
+    searchValue: _.debounce(function () {
+      this.handleSearch()
+    }, 500)
   },
   methods: {
     async loadData () {
