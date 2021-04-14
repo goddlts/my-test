@@ -2,7 +2,6 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 import Login from '../views/Login.vue'
 import Home from '../views/Home.vue'
-import Users from '../views/Users.vue'
 
 Vue.use(VueRouter)
 
@@ -17,7 +16,15 @@ const routes = [
       {
         path: 'users',
         name: 'Users',
-        component: Users
+        component: () => import(/* webpackChunkName: "users" */ '../views/Users.vue')
+      },
+      {
+        path: 'roles',
+        name: 'Roles',
+        // route level code-splitting
+        // this generates a separate chunk (roles.[hash].js) for this route
+        // which is lazy-loaded when the route is visited.
+        component: () => import(/* webpackChunkName: "roles" */ '../views/permission/Roles.vue')
       }
     ]
   },

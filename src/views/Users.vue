@@ -1,10 +1,12 @@
 <template>
   <el-card class="card">
-    <el-breadcrumb separator-class="el-icon-arrow-right">
+    <!-- <el-breadcrumb separator-class="el-icon-arrow-right">
       <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
       <el-breadcrumb-item>用户管理</el-breadcrumb-item>
       <el-breadcrumb-item>用户列表</el-breadcrumb-item>
-    </el-breadcrumb>
+    </el-breadcrumb> -->
+    <my-components level1="用户管理" level2="用户列表"></my-components>
+
     <!-- 搜索框 -->
     <div style="margin-top: 10px; margin-bottom: 10px;">
       <!-- 搜索框 -->
@@ -135,8 +137,10 @@
 <script>
 // 导入 lodash 模块
 import _ from 'lodash'
+import MyComponents from '../components/MyComponents.vue'
 
 export default {
+  components: { MyComponents },
   data () {
     return {
       searchValue: '',
@@ -352,7 +356,4 @@ export default {
 </script>
 
 <style lang="less">
-.card {
-  height: 100%;
-}
 </style>
