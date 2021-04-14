@@ -9,6 +9,12 @@ export default {
     // Add a request interceptor
     axios.interceptors.request.use(function (config) {
       // Do something before request is sent
+      // console.log('xxx')
+      // console.log(config)
+      // 判断当前请求的是否是登录接口
+      if (config.url.toLowerCase() !== '/login') {
+        config.headers.Authorization = window.localStorage.getItem('token')
+      }
       return config
     }, function (error) {
       // Do something with request error

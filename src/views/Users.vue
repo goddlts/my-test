@@ -190,7 +190,7 @@ export default {
       this.loading = true
       try {
         // 请求之前设置令牌
-        this.$http.defaults.headers.Authorization = window.localStorage.getItem('token')
+        // this.$http.defaults.headers.Authorization = window.localStorage.getItem('token')
         const res = await this.$http.get('/users', {
           params: {
             pagenum: this.pagenum,
