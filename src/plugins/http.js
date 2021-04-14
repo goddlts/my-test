@@ -30,10 +30,11 @@ export default {
       // console.log(response)
       const { meta: { status, msg } } = response.data
       if (status !== 200 && status !== 201) {
-        return Message({
+        Message({
           type: 'error',
           message: msg
         })
+        return Promise.reject(new Error(msg))
       }
       return response.data
     }, function (error) {

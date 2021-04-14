@@ -233,6 +233,12 @@ export default {
         })
         // 此处点击的是确定
         await this.$http.delete(`/users/${id}`)
+
+        // 判断当前页码如果大于1，并且当前页只有1条数据，页码--
+        if (this.pagenum > 1 && this.list.length === 1) {
+          this.pagenum--
+        }
+
         this.loadData()
         this.$message({
           type: 'success',
@@ -280,23 +286,27 @@ export default {
     },
     // 点击弹出框的确定按钮
     async handleSure () {
-      // 添加
-      if (!this.isEdit) {
-        await this.$http.post('/users', this.form)
-      } else {
-        // 修改的时候
-        await this.$http.put(`/users/${this.currentId}`, {
-          email: this.form.email,
-          mobile: this.form.mobile
-        })
-      }
+      try {
+        // 添加
+        if (!this.isEdit) {
+          await this.$http.post('/users', this.form)
+        } else {
+          // 修改的时候
+          await this.$http.put(`/users/${this.currentId}`, {
+            email: this.form.email,
+            mobile: this.form.mobile
+          })
+        }
 
-      this.dialogFormVisible = false
-      this.loadData()
-      this.$message({
-        type: 'success',
-        message: '操作成功'
-      })
+        this.dialogFormVisible = false
+        this.loadData()
+        this.$message({
+          type: 'success',
+          message: '操作成功'
+        })
+      } catch (err) {
+        console.log(err)
+      }
     },
     // 添加/编辑对话框关闭执行
     handleCloseDialog () {

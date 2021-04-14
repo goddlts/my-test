@@ -104,10 +104,12 @@ export default {
       const data = await this.$http.get('/roles')
       this.list = data.data
     },
+    // 加载树
     async loadTreeData () {
       const data = await this.$http.get('/rights/tree')
       this.treeData = data.data
     },
+    // 点击x，取消当前权限的角色
     async handleClose (role, rightId) {
       const data = await this.$http.delete(`roles/${role.id}/rights/${rightId}`)
       this.$message({
