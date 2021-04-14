@@ -64,6 +64,7 @@
     <el-dialog title="分配权限" :visible.sync="dialogFormVisible">
       <!-- 树形组件 -->
       <el-tree
+        ref="mytree"
         node-key="id"
         :default-checked-keys="defaultCheckedKeys"
         :props="props"
@@ -73,7 +74,7 @@
       </el-tree>
       <div slot="footer" class="dialog-footer">
         <el-button @click="dialogFormVisible = false">取 消</el-button>
-        <el-button type="primary" @click="dialogFormVisible = false">确 定</el-button>
+        <el-button type="primary" @click="handleSure">确 定</el-button>
       </div>
     </el-dialog>
   </el-card>
@@ -95,7 +96,9 @@ export default {
         // 存储子节点的字段
         children: 'children'
       },
-      defaultCheckedKeys: []
+      defaultCheckedKeys: [],
+      // 当前的角色id
+      currentRowId: -1
     }
   },
   created () {
@@ -135,7 +138,30 @@ export default {
         })
       })
       this.defaultCheckedKeys = arr
+
+      // 记录当前点击的角色id
+      this.currentRowId = role.id
       this.dialogFormVisible = true
+    },
+    // 重新分配权限
+    async handleSure () {
+      const arr1 = this.$refs.mytree.getHalfCheckedKeys()
+      const arr2 = this.$refs.mytree.getCheckedKeys()
+
+      // arr1.concat() 连接两个或多个数组，返回拼接好的新数组
+      // 以 , 分割的权限 ID 列表
+
+      const rids = [...arr1, ...arr2].join(',')
+
+      await this.$http.post(`/roles/${this.currentRowId}/rights`, {
+        rids
+      })
+      this.dialogFormVisible = false
+      this.$message({
+        type: 'success',
+        message: '分配权限成功'
+      })
+      this.loadData()
     }
   }
 }
