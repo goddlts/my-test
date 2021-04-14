@@ -52,10 +52,10 @@
       </el-table-column>
       <el-table-column
         label="操作">
-        <template>
+        <template slot-scope="scope">
           <el-button type="primary" icon="el-icon-edit" plain size="mini"></el-button>
           <el-button type="danger" icon="el-icon-delete" plain size="mini"></el-button>
-          <el-button type="success" icon="el-icon-check" @click="dialogFormVisible = true" plain size="mini"></el-button>
+          <el-button type="success" icon="el-icon-check" @click="handleShowDialog(scope.row)" plain size="mini"></el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -64,6 +64,8 @@
     <el-dialog title="分配权限" :visible.sync="dialogFormVisible">
       <!-- 树形组件 -->
       <el-tree
+        node-key="id"
+        :default-checked-keys="defaultCheckedKeys"
         :props="props"
         :data="treeData"
         default-expand-all
@@ -92,7 +94,8 @@ export default {
         label: 'authName',
         // 存储子节点的字段
         children: 'children'
-      }
+      },
+      defaultCheckedKeys: []
     }
   },
   created () {
@@ -117,6 +120,22 @@ export default {
         message: '取消权限成功'
       })
       role.children = data.data
+    },
+    // 打开对话框，并设置默认选中的权限
+    handleShowDialog (role) {
+      // 重新加载树，解决状态不改变的问题
+      this.loadTreeData()
+      // 设置默认选中的权限
+      const arr = []
+      role.children.forEach(level1 => {
+        level1.children.forEach(level2 => {
+          level2.children.forEach(level3 => {
+            arr.push(level3.id)
+          })
+        })
+      })
+      this.defaultCheckedKeys = arr
+      this.dialogFormVisible = true
     }
   }
 }
