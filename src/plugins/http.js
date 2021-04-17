@@ -42,6 +42,9 @@ export default {
       // Do something with response error
       return Promise.reject(error)
     })
+    // 给构造函数的原型挂载的成员
+    // 通过这个构造函数创建的所有对象都可以访问挂载到原型上的成员(包含属性和方法)
+    // 通过 MDN 查询 prototype
     Vue.prototype.$http = axios
   }
 }
