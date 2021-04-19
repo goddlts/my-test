@@ -33,66 +33,21 @@
           router
           text-color="#fff"
           active-text-color="#ffd04b">
-          <el-submenu index="1">
+          <el-submenu
+            v-for="menu in menus"
+            :key="menu.id"
+            :index="menu.path">
             <template slot="title">
               <i class="el-icon-platform-eleme"></i>
-              <span>用户管理</span>
+              <span>{{ menu.authName }}</span>
             </template>
-            <el-menu-item index="/users">
+            <!-- 二级菜单 -->
+            <el-menu-item
+              v-for="subMenu in menu.children"
+              :key="subMenu.id"
+              :index="subMenu.path">
               <i class="el-icon-menu"></i>
-              <span>用户列表</span>
-            </el-menu-item>
-          </el-submenu>
-          <el-submenu index="2">
-            <template slot="title">
-              <i class="el-icon-platform-eleme"></i>
-              <span>权限管理</span>
-            </template>
-            <el-menu-item index="/roles">
-              <i class="el-icon-menu"></i>
-              <span>角色列表</span>
-            </el-menu-item>
-            <el-menu-item index="/rights">
-              <i class="el-icon-menu"></i>
-              <span>权限列表</span>
-            </el-menu-item>
-          </el-submenu>
-          <el-submenu index="3">
-            <template slot="title">
-              <i class="el-icon-platform-eleme"></i>
-              <span>商品管理</span>
-            </template>
-            <el-menu-item index="3-1">
-              <i class="el-icon-menu"></i>
-              <span>商品列表</span>
-            </el-menu-item>
-            <el-menu-item index="3-2">
-              <i class="el-icon-menu"></i>
-              <span>分类参数</span>
-            </el-menu-item>
-            <el-menu-item index="3-3">
-              <i class="el-icon-menu"></i>
-              <span>商品分类</span>
-            </el-menu-item>
-          </el-submenu>
-          <el-submenu index="4">
-            <template slot="title">
-              <i class="el-icon-platform-eleme"></i>
-              <span>订单管理</span>
-            </template>
-            <el-menu-item index="4-1">
-              <i class="el-icon-menu"></i>
-              <span>订单列表</span>
-            </el-menu-item>
-          </el-submenu>
-          <el-submenu index="5">
-            <template slot="title">
-              <i class="el-icon-platform-eleme"></i>
-              <span>数据统计</span>
-            </template>
-            <el-menu-item index="5-1">
-              <i class="el-icon-menu"></i>
-              <span>数据报表</span>
+              <span>{{ subMenu.authName }}</span>
             </el-menu-item>
           </el-submenu>
         </el-menu>
@@ -107,7 +62,20 @@
 
 <script>
 export default {
+  data () {
+    return {
+      menus: []
+    }
+  },
+  created () {
+    this.loadMenus()
+  },
   methods: {
+    async loadMenus () {
+      const data = await this.$http.get('/menus')
+      this.menus = data.data
+      console.log(this.menus)
+    },
     handlLogout () {
       // 移除本地存储中的token
       localStorage.removeItem('token')

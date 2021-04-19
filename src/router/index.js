@@ -11,7 +11,7 @@ const routes = [
     path: '/',
     name: 'Home',
     // 当访问 / 跳转到指定路由
-    redirect: '/users',
+    // redirect: '/users',
     component: Home,
     children: [
       {
