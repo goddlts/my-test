@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <div id="app">
+    <button @click="handle">按钮</button>
+    <ul>
+      <li v-for="item in list" :key="item">
+        <input type="checkbox">
+        {{ item }}
+      </li>
+    </ul>
+  </div>
+  <script src="./node_modules/vue/dist/vue.js"></script>
+  <script>
+    const vm = new Vue({
+      el: '#app',
+      data: {
+        list: ['zs', 'li', 'ww'],
+        // 通过属性的 setter 方法监听数据的变化
+        // 当数据变化之后会更新视图
+        name: ''
+      },
+      methods: {
+        handle () {
+          // 下面的用法不是响应式的
+          // this.list[0] = 'xxxxxxxx'
+          // this.list.length = 0
+
+          // splice 方法被vue劫持，如果调用该方法，vue可以检测数据的变化，数据变化更新视图
+          // this.list.splice(0, 1, 'xxxx')
+
+          // unshift 是往数组的最前面插入一条数据
+          this.list.unshift('abc')
+        }
+      }
+    })
+  </script>
+</body>
+</html>
