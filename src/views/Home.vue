@@ -11,7 +11,7 @@
         </el-col>
         <el-col :span="2">
           <div class="btn">
-            <el-button>退出</el-button>
+            <el-button @click="handlLogout">退出</el-button>
           </div>
         </el-col>
       </el-row>
@@ -107,7 +107,19 @@
 
 <script>
 export default {
-
+  methods: {
+    handlLogout () {
+      // 移除本地存储中的token
+      localStorage.removeItem('token')
+      // 提示
+      this.$message({
+        type: 'info',
+        message: '退出成功'
+      })
+      // 跳转到登录页面
+      this.$router.push('/login')
+    }
+  }
 }
 </script>
 
