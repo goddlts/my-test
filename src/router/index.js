@@ -2,6 +2,7 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 import Login from '../views/Login.vue'
 import Home from '../views/Home.vue'
+import { Message } from 'element-ui'
 
 Vue.use(VueRouter)
 
@@ -45,6 +46,27 @@ const routes = [
 
 const router = new VueRouter({
   routes
+})
+
+router.beforeEach((to, from, next) => {
+  // to的类型 route 路由规则（路由数据）
+  // console.log(to)
+  // 判断当前访问的是否是登录页面
+  if (to.path === '/login') {
+    next()
+  } else {
+    // 如果不是登录页面，判断token，如果token不存在跳转到登录页面
+    const token = localStorage.getItem('token')
+    if (token) {
+      next()
+    } else {
+      next('/login')
+      Message({
+        type: 'warning',
+        message: '请先登录'
+      })
+    }
+  }
 })
 
 export default router
