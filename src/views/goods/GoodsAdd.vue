@@ -67,7 +67,15 @@
             </el-checkbox-group>
           </el-form-item>
         </el-tab-pane>
-        <el-tab-pane label="商品属性">商品属性</el-tab-pane>
+        <el-tab-pane label="商品属性">
+          <!-- 静态参数 -->
+          <el-form-item
+            v-for="item in staticParams"
+            :label="item.attr_name"
+            :key="item.attr_id">
+            <el-input v-model="item.attr_vals"></el-input>
+          </el-form-item>
+        </el-tab-pane>
         <el-tab-pane label="商品图片">商品图片</el-tab-pane>
         <el-tab-pane label="商品描述">商品描述</el-tab-pane>
       </el-tabs>
@@ -122,21 +130,22 @@ export default {
         const sel = this.active === 1 ? 'many' : 'only'
         const catId = this.catIds[2]
         const data = await this.$http.get(`/categories/${catId}/attributes?sel=${sel}`)
-        // 加载动态参数
-        this.dynamicParams = data.data
 
-        this.dynamicParams.forEach(param => {
-          // param.attr_vals
-          // 动态参数，属性值的数组，绑定checkbox使用
-
-          // 动态给对象增加的属性，不是响应式数据
-          param.attr_arr = param.attr_vals.split(',')
-
-          // 如果想动态给元素增加响应式数据应该使用 $set
-          // this.$set(param, 'attr_arr', param.attr_vals.split(','))
-        })
-        console.log(this.dynamicParams)
-        // 加载静态参数
+        if (sel === 'many') {
+          // 加载动态参数
+          this.dynamicParams = data.data
+          this.dynamicParams.forEach(param => {
+            // param.attr_vals
+            // 动态参数，属性值的数组，绑定checkbox使用
+            // 动态给对象增加的属性，不是响应式数据
+            param.attr_arr = param.attr_vals.split(',')
+            // 如果想动态给元素增加响应式数据应该使用 $set
+            // this.$set(param, 'attr_arr', param.attr_vals.split(','))
+          })
+        } else {
+          // 加载静态参数
+          this.staticParams = data.data
+        }
       }
     },
     // 商品分类改变
