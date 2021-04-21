@@ -53,8 +53,18 @@
 
         </el-tab-pane>
         <el-tab-pane label="商品参数">
-          <el-form-item label="商品名称">
-
+          <!-- 动态参数 -->
+          <el-form-item
+            v-for="item in dynamicParams"
+            :label="item.attr_name"
+            :key="item.attr_id">
+            <el-checkbox-group v-model="item.attr_arr">
+              <el-checkbox
+                border
+                v-for="attr in item.attr_arr"
+                :key="attr"
+                :label="attr"></el-checkbox>
+            </el-checkbox-group>
           </el-form-item>
         </el-tab-pane>
         <el-tab-pane label="商品属性">商品属性</el-tab-pane>
@@ -115,8 +125,17 @@ export default {
         // 加载动态参数
         this.dynamicParams = data.data
 
-        console.log(this.dynamicParams)
+        this.dynamicParams.forEach(param => {
+          // param.attr_vals
+          // 动态参数，属性值的数组，绑定checkbox使用
 
+          // 动态给对象增加的属性，不是响应式数据
+          param.attr_arr = param.attr_vals.split(',')
+
+          // 如果想动态给元素增加响应式数据应该使用 $set
+          // this.$set(param, 'attr_arr', param.attr_vals.split(','))
+        })
+        console.log(this.dynamicParams)
         // 加载静态参数
       }
     },
