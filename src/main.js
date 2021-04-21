@@ -5,7 +5,7 @@ import store from './store'
 import './assets/css/style.less'
 import dayjs from 'dayjs'
 import http from './plugins/http'
-import { MenuItem, Dialog, Card, Tag, Message, Notification, Tree, Select, Option, Pagination, Switch, Loading, Input, Table, TableColumn, Breadcrumb, BreadcrumbItem, Button, Form, FormItem, Container, Header, Row, Col, Aside, Menu, Submenu, Main, MessageBox } from 'element-ui'
+import { Alert, MenuItem, Dialog, Card, Tag, Message, Notification, Tree, Select, Option, Pagination, Switch, Loading, Input, Table, TableColumn, Breadcrumb, BreadcrumbItem, Button, Form, FormItem, Container, Header, Row, Col, Aside, Menu, Submenu, Main, MessageBox } from 'element-ui'
 
 Vue.use(http)
 
@@ -17,7 +17,7 @@ Vue.use(Button).use(Dialog).use(Form).use(FormItem).use(Container).use(Header).u
 Vue.use(Aside).use(Menu).use(Submenu).use(Main)
 Vue.use(Breadcrumb).use(BreadcrumbItem).use(Table).use(Input).use(TableColumn).use(Switch).use(Loading)
 Vue.use(Pagination).use(Select).use(Option).use(Tree).use(Tag).use(Card).use(MenuItem)
-Vue.use(Loading.directive)
+Vue.use(Loading.directive).use(Alert)
 
 Vue.prototype.$loading = Loading.service
 Vue.prototype.$alert = MessageBox.alert

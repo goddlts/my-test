@@ -8,7 +8,7 @@
         <el-button slot="append" icon="el-icon-search"></el-button>
       </el-input>
 
-      <el-button type="success" plain style="margin-left: 10px;">添加商品</el-button>
+      <el-button type="success" plain @click="$router.push('/goods/add')" style="margin-left: 10px;">添加商品</el-button>
 
       <el-table
         border
@@ -49,6 +49,17 @@
           </template>
         </el-table-column>
       </el-table>
+
+      <!-- 分页 -->
+      <el-pagination
+        @size-change="handleSizeChange"
+        @current-change="handleCurrentChange"
+        :current-page="pagenum"
+        :page-sizes="[10, 20, 30, 40]"
+        :page-size="pagesize"
+        layout="total, sizes, prev, pager, next, jumper"
+        :total="total">
+      </el-pagination>
     </div>
   </el-card>
 </template>
@@ -61,7 +72,8 @@ export default {
     return {
       list: [],
       pagenum: 1,
-      pagesize: 10
+      pagesize: 10,
+      total: 0
     }
   },
   created () {
@@ -76,6 +88,17 @@ export default {
         }
       })
       this.list = data.data.goods
+      this.total = data.data.total
+    },
+    // 分页方法
+    handleSizeChange (val) {
+      this.pagesize = val
+      this.pagenum = 1
+      this.loadData()
+    },
+    handleCurrentChange (val) {
+      this.pagenum = val
+      this.loadData()
     }
   }
 }
