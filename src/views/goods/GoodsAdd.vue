@@ -76,7 +76,18 @@
             <el-input v-model="item.attr_vals"></el-input>
           </el-form-item>
         </el-tab-pane>
-        <el-tab-pane label="商品图片">商品图片</el-tab-pane>
+        <el-tab-pane label="商品图片">
+          <!-- 上传图片 -->
+          <!-- action 上传图片的接口，不会经过axios的拦截器，也就是不会自动添加token -->
+          <el-upload
+            action="http://localhost:8888/api/private/v1/upload"
+            :headers="headers"
+            :on-remove="handleRemove"
+            :on-success="handleSuccess"
+            list-type="picture">
+            <el-button size="small" type="primary">点击上传</el-button>
+          </el-upload>
+        </el-tab-pane>
         <el-tab-pane label="商品描述">商品描述</el-tab-pane>
       </el-tabs>
     </el-form>
@@ -89,6 +100,9 @@ export default {
   components: { MyComponents },
   data () {
     return {
+      headers: {
+        Authorization: localStorage.getItem('token')
+      },
       active: 0,
       // 商品分类数据
       options: [],
@@ -104,7 +118,11 @@ export default {
         goods_weight: '',
         goods_number: '',
         // 以 , 分割的商品分类id列表
-        goods_cat: ''
+        goods_cat: '',
+        // 商品描述
+        goods_introduce: '',
+        pics: [],
+        attrs: []
       }
     }
   },
@@ -163,6 +181,26 @@ export default {
     async loadCats () {
       const data = await this.$http.get('/categories?type=3')
       this.options = data.data
+    },
+    handleRemove (file, fileList) {
+      // console.log(file)
+      // console.log(fileList)
+
+      // 获取删除图片在数组中的索引
+      const index = this.formData.pics.findIndex(item => {
+        return item.pic === file.response.data.tmp_path
+      })
+      this.formData.pics.splice(index, 1)
+    },
+    handleSuccess (response, file, fileList) {
+      this.formData.pics.push({
+        pic: response.data.tmp_path
+      })
+      // console.log(this.formData.pics)
+      // 服务器响应回来的对象
+      // console.log(response)
+      // console.log(file)
+      // console.log(fileList)
     }
   }
 }
