@@ -88,16 +88,21 @@
             <el-button size="small" type="primary">点击上传</el-button>
           </el-upload>
         </el-tab-pane>
-        <el-tab-pane label="商品描述">商品描述</el-tab-pane>
+        <el-tab-pane label="商品描述">
+          <el-button>添加</el-button>
+          <vue-editor v-model="formData.goods_introduce"></vue-editor>
+        </el-tab-pane>
       </el-tabs>
     </el-form>
   </el-card>
 </template>
 
 <script>
+import { VueEditor } from 'vue2-editor'
+
 import MyComponents from '../../components/MyComponents.vue'
 export default {
-  components: { MyComponents },
+  components: { MyComponents, VueEditor },
   data () {
     return {
       headers: {
